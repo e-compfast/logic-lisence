@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LOGIC PLANNING TEST</title>
+	<style type="text/css">
+		#dataOps {
+			text-transform: uppercase;
+		}
+		#ops {
+			text-align: center;
+		}
+
+		table{
+			width: 100%
+		}
+	</style>
+</head>
+<body>
+<table border="1" cellpadding="10" cellspacing="0">
+	<thead>
+		<tr>
+			<th id="dataOps">timestamp</th>
+			<th id="dataOps">Expired 2 Minggu</th>
+			<th id="dataOps">Expired 6 Bulan</th>
+			<th id="dataOps">Expired 12 Bulan</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td id="sekarang"></td>
+			<td id="waktu2minggu"></td>
+			<td id="waktub6"></td>
+			<td id="waktub12"></td>
+
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th colspan="1"><button id="createLisence_btn">Buat Lisensi</button></td>
+			<td colspan="3">
+				<center>
+					<input type="text" id="ops" placeholder="Input Lisence">
+				</center>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="1" id="ops">Timer</td>
+			<td colspan="3" id="timer"></td>
+		</tr>
+	</tfoot>
+</table>
+
+<script>
+
+	var logic = true;
+
+	function createLisence(kondisi){
+		if(kondisi == true){
+			fungsi();
+			console.log("Akses diizinkan!");
+
+		} else if( kondisi == false){
+			console.log("Akses ditolak!");
+		}
+
+	}
+
+	var fungsi = () => {
+		//BUTTON CREATE LISENCE
+		var buatLisensi = document.getElementById("createLisence_btn");
+		// INPUT VARIABLE
+		var inputLisence = document.getElementById("ops");
+			buatLisensi.addEventListener("click", function(){
+
+			// VARIABLE LISENCE
+			const trial = "LSC2WEEKS";
+			const lisensi6bulan = "LSC06";
+			const lisensi12bulan = "LSC12"
+
+			// VARIABLE CHECKER
+			const lisensiChecker = inputLisence.value;
+
+			var waktu = new Date();
+			var tahunDepan = waktu.getFullYear();
+			var bulanDepan = waktu.getMonth() + 1;
+			var tahun = waktu.getFullYear();
+
+			var bulan = waktu.getMonth() + 1;
+			var tanggal = waktu.getDate();
+			var jam = waktu.getHours();
+			var menit = waktu.getMinutes();
+			var detik = waktu.getSeconds();
+
+	
+           	function BulanString(value){
+           		var months = [ "January", "February", "March", "April", "May", "June", 
+           "July", "August", "September", "October", "November", "December" ];
+           		var selectedMonthName = months[value - 1];
+
+           		return selectedMonthName;
+           	}
+
+           	// var namaBulanString = BulanString(3);
+           	// console.log(namaBulanString)
+
+
+			function kurangiBulan(abulan, bbulan){
+				var hasil = abulan + bbulan ;
+				if(hasil <= 12){
+					return hasil;
+				} else if(hasil > 12){
+					console.log("ganti tahun!");
+					hasil = hasil - 12;
+					tahunDepan = tahunDepan + 1;
+					console.log(tahunDepan);
+					return hasil;
+				} 
+				bulan = hasil;
+			}
+
+			function stringWaktu(nilai){
+				var waktuString = new Date(nilai).getTime();
+				return waktuString;
+			}
+
+
+			function trialLisence(date){
+				var tanggal_2minggu = tanggal + date;
+				if(tanggal_2minggu <= 30 || tanggal_2minggu <= 31 ){
+					return tanggal_2minggu;
+				} else if(tanggal_2minggu > 30 || tanggal_2minggu > 31){
+					console.log("masuk bulan depan");
+					tanggal_2minggu = tanggal_2minggu - 30;
+					bulanDepan = bulanDepan + 1;
+					return tanggal_2minggu;
+				}
+
+				return tanggal_2minggu;
+			}
+
+			
+			var waktuSekarang = BulanString(bulan) +" "+tanggal+", "+tahun+" "+jam+":"+menit+":"+detik;
+			const teks = document.getElementById("sekarang");
+				  teks.innerHTML ="Waktu Sekarang : " +waktuSekarang;
+
+			// var stringWaktuSekarang = stringWaktu(waktuSekarang);
+		 	// console.log("Now : " + stringWaktuSekarang);
+
+			 if(lisensiChecker == trial){
+			 	
+			 	var trial2weeks = trialLisence(14) ;
+			 	var waktuTrial = BulanString(bulanDepan) +" "+trial2weeks+", "+tahun+" "+jam+":"+menit+":"+detik;
+
+			 	var defaultLisence = waktuTrial;
+			 	var defaultLisenceName = trial;
+
+			 	const waktu2 = document.getElementById("waktu2minggu");
+				waktu2.innerHTML ="Waktu 2 Minggu : " +waktuTrial;
+
+			 	updateDataLisensi();
+			 	console.log(trial);
+			 	
+			 	
+			 }
+
+			if(lisensiChecker == lisensi6bulan){
+
+				var b6 = kurangiBulan(bulan, 6);
+				var waktuB6 = BulanString(b6) +" "+tanggal+", "+tahunDepan+" "+jam+":"+menit+":"+detik;
+				const waktua = document.getElementById("waktub6");
+				waktua.innerHTML ="Waktu 6 bulan : " +waktuB6;
+
+				var defaultLisence = waktuB6;
+				var defaultLisenceName = lisensi6bulan;
+				updateDataLisensi();
+
+				// var string06 = stringWaktu(waktuB6);
+				// console.log("LSC06 : " +string06);
+
+
+			
+			} if(lisensiChecker == lisensi12bulan){
+				
+				var b12 = kurangiBulan(bulan, 12);
+				var waktuB12 = BulanString(b12) +" "+tanggal+", "+tahunDepan+" "+jam+":"+menit+":"+detik;
+				const waktub = document.getElementById("waktub12");
+				waktub.innerHTML ="Waktu 1 tahun : " +waktuB12;
+	
+
+				var defaultLisence = waktuB12;
+				var defaultLisenceName = lisensi12bulan;
+
+
+				updateDataLisensi();
+
+				// var string12 = stringWaktu(waktuB12);
+				// console.log("LSC12 : " +string12);
+				
+			}
+
+
+			
+
+
+			// INIT DATA DARI FIREBASE DB
+
+			function updateDataLisensi(){
+				var dataSimpan = {
+					"alamhafidz01" :{
+						"lisensi" : {
+							"code" : defaultLisenceName,
+							"expired" : [stringWaktu(defaultLisence), defaultLisence],
+							"timestamp" : [stringWaktu(waktuSekarang), waktuSekarang],
+							"sheet_id": ""
+						},
+
+						"data": {
+							"nama" : "alam santiko wibowo",
+							"nohp" : "082125497764",
+							"email": "alamhafidz01@gmail.com"
+						}
+					}
+				}; //VARIABLE dataSimpan
+
+				console.log(dataSimpan)
+
+			} //updateDataLisensi();
+
+
+
+		}); // buatLisensi button
+	}
+
+	createLisence(logic);
+
+
+
+</script>
+</body>
+</html>
